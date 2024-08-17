@@ -6,37 +6,53 @@ public class Main {
     private static final int MIN_HUNGER = 1;
     private static final int MIN_HAPPINESS = 1;
     private static final int RATE_OF_CHANGE = 10;
-    private static final int INITIAL_HUNGER_LEVEL = 50;
-    private static final int INITIAL_HAPPINESS_LEVEL = 50;
+
     static Scanner scanner = new Scanner(System.in);
-    static Pet pet = null;
+    static String petName="";
+    static int hungerLevel;
+    static int happinessLevel;
+    static int choice;
+
     public static void main(String[] args) {
         boolean isPlaying = true;
+        boolean isGameOver = false;
         while (isPlaying) {
-            printGameMenu();
-            int choice = getUserChoice();
+            if(!isGameOver) {
+                printGameMenu();
+                choice = getUserChoice();
+            }
             switch (choice) {
                 case 1:
-                    if (pet != null)
+                    if (!petName.isEmpty())
                         System.out.println("You already have a pet! Please end the game and start a new game to adopt a new pet.");
                     else
                         adoptPet();
                     break;
                 case 2:
-                    if (pet == null) {
+                    if (petName.isEmpty()) {
                         System.out.println("You don't have a pet yet. Please adopt one first!");
                     } else {
                         feedPet();
+                        if(happinessLevel<MIN_HAPPINESS){
+                            isGameOver=true;
+                            choice=5;
+                        }
                     }
                     break;
-                case 3:
-                    if (pet == null)
+                case 3:{
+                    if (petName.isEmpty())
                         System.out.println("You don't have a pet yet. Please adopt one first.");
-                    else
+                    else{
                         playWithPet();
+                        if(hungerLevel<MIN_HUNGER){
+                            isGameOver=true;
+                            choice=5;
+                        }
+                    }
                     break;
+                }
                 case 4:
-                    if (pet == null)
+                    if (petName.isEmpty())
                         System.out.println("You don't have a pet yet. Please adopt one first.");
                     else
                         checkPetStatus();
@@ -44,11 +60,16 @@ public class Main {
                 case 5:
                     isPlaying = false;
                     checkPetStatus();
-                    System.out.println("Do you want to start a new game? (y/n)");
-                    String answer = scanner.next();
-                    if (answer.equalsIgnoreCase("y")) {
-                        pet = null;
-                        isPlaying = true;
+                    if(isGameOver)
+                        System.out.println("Game Over!");
+                    else {
+                        System.out.println("Do you want to start a new game? (y/n)");
+                        String answer = scanner.next();
+                        if (answer.equalsIgnoreCase("y")) {
+                            petName = "";
+                            isPlaying = true;
+                        }
+                        else System.out.println("Good Bye!");
                     }
                     break;
                 default:
@@ -59,23 +80,40 @@ public class Main {
     }
 
     private static void playWithPet() {
-
+        if (happinessLevel<MAX_HAPPINESS){
+            happinessLevel+=10;
+            System.out.println("Pet played and is happier now!");
+        }
+        else{
+            happinessLevel-=10;
+            System.out.println("pet is too happy");
+        }
+        hungerLevel-=10;
     }
 
     private static void feedPet() {
-
+        if (hungerLevel<MAX_HUNGER){
+            hungerLevel+=10;
+            System.out.println("Pet has been feed!");
+        }
+        else{
+            hungerLevel-=10;
+            System.out.println("pet is full!");
+        }
+        happinessLevel-=10;
     }
 
     private static void checkPetStatus() {
-        System.out.println(pet.getPetName() + "'s status:");
-        System.out.println("  Hunger Level: " + pet.getHungerLevel());
-        System.out.println("  Happiness Level: " + pet.getHappinessLevel());
+        System.out.println(petName + "'s status:");
+        System.out.println("  Hunger Level: " + hungerLevel);
+        System.out.println("  Happiness Level: " + happinessLevel);
     }
 
     private static void adoptPet() {
         System.out.print("Enter your pet's name: ");
-        String petName = scanner.nextLine();
-        pet = new Pet(petName,INITIAL_HUNGER_LEVEL, INITIAL_HAPPINESS_LEVEL);
+        petName = scanner.nextLine();
+        hungerLevel=50;
+        happinessLevel=50;
         System.out.println("Congratulations! You adopted " + petName + ".");
     }
 
@@ -93,7 +131,7 @@ public class Main {
 
     private static void printGameMenu() {
         System.out.println("\nHello, Welcome to the PetPal Simulation Game!");
-        System.out.println("-----------------------------------");
+        System.out.println("-----------------------------------------------");
         System.out.println("1. Adopt a Pet");
         System.out.println("2. Feed Your Pet");
         System.out.println("3. Play with Your Pet");
