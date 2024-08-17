@@ -8,7 +8,7 @@ public class Main {
     private static final int RATE_OF_CHANGE = 10;
 
     static Scanner scanner = new Scanner(System.in);
-    static String petName="";
+    static String petName = "";
     static int hungerLevel;
     static int happinessLevel;
     static int choice;
@@ -17,9 +17,9 @@ public class Main {
         boolean isPlaying = true;
         boolean isGameOver = false;
         while (isPlaying) {
-            if(!isGameOver) {
+            if (!isGameOver) {
                 printGameMenu();
-                choice = getUserChoice();
+                getUserChoice();
             }
             switch (choice) {
                 case 1:
@@ -33,20 +33,20 @@ public class Main {
                         System.out.println("You don't have a pet yet. Please adopt one first!");
                     } else {
                         feedPet();
-                        if(happinessLevel<MIN_HAPPINESS){
-                            isGameOver=true;
-                            choice=5;
+                        if (happinessLevel < MIN_HAPPINESS) {
+                            isGameOver = true;
+                            choice = 5;
                         }
                     }
                     break;
-                case 3:{
+                case 3: {
                     if (petName.isEmpty())
                         System.out.println("You don't have a pet yet. Please adopt one first.");
-                    else{
+                    else {
                         playWithPet();
-                        if(hungerLevel<MIN_HUNGER){
-                            isGameOver=true;
-                            choice=5;
+                        if (hungerLevel < MIN_HUNGER) {
+                            isGameOver = true;
+                            choice = 5;
                         }
                     }
                     break;
@@ -60,7 +60,7 @@ public class Main {
                 case 5:
                     isPlaying = false;
                     checkPetStatus();
-                    if(isGameOver)
+                    if (isGameOver)
                         System.out.println("Game Over!");
                     else {
                         System.out.println("Do you want to start a new game? (y/n)");
@@ -68,8 +68,7 @@ public class Main {
                         if (answer.equalsIgnoreCase("y")) {
                             petName = "";
                             isPlaying = true;
-                        }
-                        else System.out.println("Good Bye!");
+                        } else System.out.println("Good Bye!");
                     }
                     break;
                 default:
@@ -80,27 +79,25 @@ public class Main {
     }
 
     private static void playWithPet() {
-        if (happinessLevel<MAX_HAPPINESS){
-            happinessLevel+=10;
+        if (happinessLevel < MAX_HAPPINESS) {
+            happinessLevel += RATE_OF_CHANGE;
             System.out.println("Pet played and is happier now!");
-        }
-        else{
-            happinessLevel-=10;
+        } else {
+            happinessLevel -= RATE_OF_CHANGE;
             System.out.println("pet is too happy");
         }
-        hungerLevel-=10;
+        hungerLevel -= RATE_OF_CHANGE;
     }
 
     private static void feedPet() {
-        if (hungerLevel<MAX_HUNGER){
-            hungerLevel+=10;
+        if (hungerLevel < MAX_HUNGER) {
+            hungerLevel += RATE_OF_CHANGE;
             System.out.println("Pet has been feed!");
-        }
-        else{
-            hungerLevel-=10;
+        } else {
+            hungerLevel -= RATE_OF_CHANGE;
             System.out.println("pet is full!");
         }
-        happinessLevel-=10;
+        happinessLevel -= RATE_OF_CHANGE;
     }
 
     private static void checkPetStatus() {
@@ -112,21 +109,18 @@ public class Main {
     private static void adoptPet() {
         System.out.print("Enter your pet's name: ");
         petName = scanner.nextLine();
-        hungerLevel=50;
-        happinessLevel=50;
+        hungerLevel = 50;
+        happinessLevel = 50;
         System.out.println("Congratulations! You adopted " + petName + ".");
     }
 
-    private static int getUserChoice() {
-        int choice;
+    private static void getUserChoice() {
         try {
-            choice = scanner.nextInt();
-            scanner.nextLine();
+            choice = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
             System.out.println("Invalid input! Please enter a number.");
-            choice=0;
+            choice = 0;
         }
-        return choice;
     }
 
     private static void printGameMenu() {
