@@ -16,12 +16,11 @@ public class Main {
     private static int hungerLevel=50;
     private static int happinessLevel=50;
     private static int choice;
-
+    private static boolean isGameOver = false;
+    private static boolean isPlaying = true;
     public static void main(String[] args) {
 
         // Main game loop
-        boolean isPlaying = true;
-        boolean isGameOver = false;
         while (isPlaying) {
             if (!isGameOver) {
                 printGameMenu();
@@ -33,17 +32,11 @@ public class Main {
                     break;
                 case 2:
                     feedPet();
-                    if (checkGameStatus(hungerLevel, happinessLevel)) {
-                        isGameOver = true;
-                        choice = 5;
-                    }
+                    checkGameOver(hungerLevel, happinessLevel);
                     break;
                 case 3: {
                     playWithPet();
-                    if (checkGameStatus(hungerLevel, happinessLevel)) {
-                        isGameOver = true;
-                        choice = 5;
-                    }
+                    checkGameOver(hungerLevel, happinessLevel);
                     break;
                 }
                 case 4:
@@ -78,6 +71,14 @@ public class Main {
         petName="";
         hungerLevel=50;
         happinessLevel=50;
+    }
+
+    // Checks game over or not!
+    private static void checkGameOver(int hungerLevel, int happinessLevel) {
+        if (checkGameStatus(hungerLevel, happinessLevel)) {
+            isGameOver = true;
+            choice = 5;
+        }
     }
 
     // Checks if the pet's condition is critical (hunger or happiness too low)
